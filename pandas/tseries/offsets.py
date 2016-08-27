@@ -2,6 +2,7 @@ from datetime import date, datetime, timedelta
 from pandas.compat import range
 from pandas import compat
 import numpy as np
+import sys
 
 from pandas.types.generic import ABCSeries, ABCDatetimeIndex, ABCPeriod
 from pandas.tseries.tools import to_datetime, normalize_date
@@ -2737,7 +2738,10 @@ class Tick(SingleConstructorOffset):
 
     @property
     def delta(self):
-        return self.n * self._inc
+        try:
+            return self.n * self._inc
+        except OverflowError:
+            sys.exit(1)
 
     @property
     def nanos(self):
